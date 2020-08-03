@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import logo from "./assets/logo.png";
 import "./App.css";
 
-export interface QuestionProps {
+interface QuestionProps {
   question: String;
   answer: {
     [key: string]: string;
   };
 }
 
+interface LocationState {
+  name: string;
+}
+
 function Questions(props: any) {
-  let location = useLocation();
-  console.log(location.state);
+  let location = useLocation<LocationState>();
+  const { name } = location.state;
   const [data, setData] = useState({});
   const [currentQuestion, setQuestion] = useState(0);
   const [currentPoints, setPoints] = useState(0);
+  const [selectedOption, setOption] = useState("");
   const [points, setTotalPoints] = useState(0);
   const [questions, setQuestions] = useState<string[]>([]);
   const [answers, setAnswers] = useState<
@@ -41,56 +39,62 @@ function Questions(props: any) {
 
   useEffect(() => {
     const newresult: string[] = Object.values(data).map((item: any) => {
-      console.log("question", [...answers, item.answer]);
       setAnswers((answers) => [...answers, item.answer]);
       return item.question;
     });
     setQuestions(newresult);
-
-    console.log("respostas", answers);
   }, [data]);
 
-  useEffect(() => {
-    setQuestion(currentQuestion + 1);
-  }, [points]);
-
-  useEffect(() => {
-    // TODO ended?
-  }, [currentQuestion]);
-
   function onAnswerPicked(event: any) {
-    setPoints(event.target.value);
+    setPoints(Number(event.target.value));
+    setOption(event.target.value);
     console.log(event.target.value);
   }
 
   function handleNext() {
-    setTotalPoints((points) => points + currentPoints);
+    setTotalPoints(points + currentPoints);
+    setOption("");
+    setQuestion(currentQuestion + 1);
   }
 
   function Question(props: QuestionProps) {
     return (
       <>
-        <form>
-          <div>{props.question}</div>
-          <div>
-            {props.answer &&
-              Object.keys(props.answer).map((key: string) => {
-                return (
-                  <div className="radio">
-                    <label>
-                      <input
-                        type="radio"
-                        name="answer"
-                        value={Number(key)}
-                        onChange={onAnswerPicked}
-                      />
-                      {props.answer[key]}
-                    </label>
-                  </div>
-                );
-              })}
-          </div>
-        </form>
+        <div>{name + ", " + props.question}</div>
+        <div>
+          {props.answer &&
+            Object.keys(props.answer).map((key: string, index) => {
+              return (
+                <div className="radio" key={index}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="answer"
+                      value={Number(key)}
+                      checked={selectedOption === key}
+                      onChange={(event) => onAnswerPicked(event)}
+                    />
+                    {props.answer[key]}
+                  </label>
+                </div>
+              );
+            })}
+        </div>
+
+        <div>
+          <button type="button" onClick={() => handleNext()}>
+            NEXT
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  function Outcome() {
+    return (
+      <>
+        <div>Thank You {name}</div>
+        <div>You scored {points} out of 24 possible.</div>
       </>
     );
   }
@@ -105,16 +109,15 @@ function Questions(props: any) {
       </header>
       <div>
         <article>
-          <Question
-            question={questions[currentQuestion]}
-            answer={answers[currentQuestion]}
-          />
+          {currentQuestion < questions.length ? (
+            <Question
+              question={questions[currentQuestion]}
+              answer={answers[currentQuestion]}
+            />
+          ) : (
+            <Outcome />
+          )}
         </article>
-        <div>
-          <button type="button" onClick={() => handleNext()}>
-            NEXT
-          </button>
-        </div>
       </div>
     </div>
   );

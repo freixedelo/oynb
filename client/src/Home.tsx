@@ -1,28 +1,15 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import logo from "./assets/logo.png";
 import "./App.css";
 
 function Home() {
   const [name, setName] = useState("");
-
-  function handleSubmit(event: any): any {
-    console.log(event);
-    setName("asd");
-    alert("A name was submitted: " + name);
-    event.preventDefault();
-  }
+  const history = useHistory();
 
   function handleChange(event: any): any {
     setName(event.target.value);
   }
-  const history = useHistory();
 
   function handleClick() {
     history.push("/questions", { name });
