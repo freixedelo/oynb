@@ -11,12 +11,44 @@
 }
 
 .App-logo {
-  height: 20vmin;
+  height: 10vmin;
   pointer-events: none;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.question {
+  font-size: 25pt;
+  font-weight: bold;
+}
+
+.tile {
+  margin-top: 40px;
+}
+
+.options {
+  text-align: left;
+  font-size: 18pt;
+}
+
+.button {
+  background-color: #fcc300; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.currentPoints {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 40px;
 }
 
 @keyframes App-logo-spin {

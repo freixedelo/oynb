@@ -30,9 +30,11 @@ function Home() {
             Name:
             <input type="text" value={name} onChange={handleChange} />
           </label>
-          <button type="button" onClick={handleClick}>
-            NEXT
-          </button>
+          <div>
+            <button type="button" onClick={handleClick} className="button">
+              NEXT
+            </button>
+          </div>
         </article>
       </div>
     </div>

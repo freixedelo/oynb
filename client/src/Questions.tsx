@@ -60,8 +60,8 @@ function Questions(props: any) {
   function Question(props: QuestionProps) {
     return (
       <>
-        <div>{name + ", " + props.question}</div>
-        <div>
+        <div className="question">{name + ", " + props.question}</div>
+        <div className="options">
           {props.answer &&
             Object.keys(props.answer).map((key: string, index) => {
               return (
@@ -82,7 +82,7 @@ function Questions(props: any) {
         </div>
 
         <div>
-          <button type="button" onClick={() => handleNext()}>
+          <button type="button" onClick={() => handleNext()} className="button">
             NEXT
           </button>
         </div>
@@ -101,14 +101,14 @@ function Questions(props: any) {
 
   return (
     <div className="App">
+      <div className="currentPoints">
+        {currentQuestion < questions.length ? "Points so far: " + points : ""}
+      </div>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <div>
-          <h2>Welcome to OYNB</h2>
-        </div>
       </header>
       <div>
-        <article>
+        <article className="tile">
           {currentQuestion < questions.length ? (
             <Question
               question={questions[currentQuestion]}
